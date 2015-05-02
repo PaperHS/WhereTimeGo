@@ -3,10 +3,11 @@ package com.paper.wheretimego;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+
+import com.umeng.update.UmengUpdateAgent;
 
 import java.util.Calendar;
 import java.util.Collections;
@@ -17,7 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends BaseAcitivity {
 
     @InjectView(R.id.main_recycleview)
     RecyclerView mainRecycleview;
@@ -32,7 +33,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
        setSupportActionBar(toolbar);
-
+        UmengUpdateAgent.update(this);
         init();
 
     }
