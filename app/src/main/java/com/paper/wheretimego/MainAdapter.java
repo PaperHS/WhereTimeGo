@@ -41,8 +41,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainAdapterVH>
     List<UsageStats> datalist;
     Context mContext;
     PackageManager mPakgageManger;
+    RecyclerView recyclerView;
 
-    public MainAdapter(Context context, List<UsageStats> data) {
+    public MainAdapter(Context context, List<UsageStats> data ) {
         inflater = LayoutInflater.from(context);
         datalist = data;
         this.mContext = context;
@@ -58,19 +59,20 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainAdapterVH>
     public void onBindViewHolder(MainAdapterVH holder, int position) {
         UsageStats usageStats = datalist.get(position);
         ApplicationInfo info = null;
-        try {
-            info = mPakgageManger.getApplicationInfo(usageStats.getPackageName(),0);
-            holder.mainIcon.setImageDrawable(info.loadIcon(mPakgageManger));
-            holder.mainAppName.setText(info.loadLabel(mPakgageManger));
-            Bitmap bm = DateUtils.convertDrawable2BitmapByCanvas(info.loadIcon(mPakgageManger));
-            Palette palette = Palette.generate(bm);
-            holder.mCardview.setCardBackgroundColor(palette.getMutedColor(R.color.primary));
-        } catch (PackageManager.NameNotFoundException e) {
-            holder.mainIcon.setImageResource(R.mipmap.ic_launcher);
-            holder.mainAppName.setText(usageStats.getPackageName() + "已卸载");
+        if (((MainActivity)mContext).isIdle) {
+            try {
+                info = mPakgageManger.getApplicationInfo(usageStats.getPackageName(), 0);
+                holder.mainIcon.setImageDrawable(info.loadIcon(mPakgageManger));
+                holder.mainAppName.setText(info.loadLabel(mPakgageManger));
+                Bitmap bm = DateUtils.convertDrawable2BitmapByCanvas(info.loadIcon(mPakgageManger));
+                Palette palette = Palette.generate(bm);
+                holder.mCardview.setCardBackgroundColor(palette.getMutedColor(R.color.primary));
+            } catch (PackageManager.NameNotFoundException e) {
+                holder.mainIcon.setImageResource(R.mipmap.ic_launcher);
+                holder.mainAppName.setText(usageStats.getPackageName() + "已卸载");
+            }
+            holder.mainUsetime.setText(DateUtils.formatTime(usageStats.getTotalTimeInForeground() / 1000));
         }
-        holder.mainUsetime.setText(DateUtils.formatTime(usageStats.getTotalTimeInForeground()/1000));
-
     }
 
 
