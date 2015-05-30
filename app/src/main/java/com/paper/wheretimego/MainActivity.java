@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.widget.AbsListView;
 
 import com.umeng.update.UmengUpdateAgent;
 
@@ -56,19 +55,30 @@ public class MainActivity extends BaseAcitivity {
         mainAdapter = new MainAdapter(this, queryUsageStats);
         mainRecycleview.setAdapter(mainAdapter);
         mainRecycleview.setOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                Log.e("hshs", "dx:" + dx + "   dy" + dy);
+//                if (Math.abs(dy)<100){
+//                    isIdle = true;
+//                }else isIdle = false;
+//                super.onScrolled(recyclerView, dx, dy);
+            }
+
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 switch (newState){
-                    case AbsListView.OnScrollListener.SCROLL_STATE_FLING:
-                        case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
-                            isIdle = false;
-                            break;
-                        case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
-                            isIdle= true;
-                           mainAdapter.notifyDataSetChanged();
-                            break;
-                        default:
-                            break;
+//                    case AbsListView.OnScrollListener.SCROLL_STATE_FLING:
+//                            isIdle = false;
+//                            break;
+//
+//                    case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
+//                        case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
+//                            isIdle= true;
+//                           mainAdapter.notifyDataSetChanged();
+//                            break;
+//                        default:
+//                            break;
                 }
                 super.onScrollStateChanged(recyclerView, newState);
             }

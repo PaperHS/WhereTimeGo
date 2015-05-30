@@ -20,6 +20,12 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * ,==.              |~~~
@@ -42,13 +48,16 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainAdapterVH>
     Context mContext;
     PackageManager mPakgageManger;
     RecyclerView recyclerView;
-
+    private CompositeSubscription _subscriptions;
     public MainAdapter(Context context, List<UsageStats> data ) {
         inflater = LayoutInflater.from(context);
         datalist = data;
         this.mContext = context;
         mPakgageManger = context.getPackageManager();
+//        _subscriptions = new CompositeSubscription();
+//        ConnectableObservable<Object> tapEventEmitter = RxBus.getBus().toObserverable().publish();
     }
+
 
     @Override
     public MainAdapterVH onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -56,17 +65,71 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainAdapterVH>
     }
 
     @Override
-    public void onBindViewHolder(MainAdapterVH holder, int position) {
+    public void onBindViewHolder(final MainAdapterVH holder, int position) {
         UsageStats usageStats = datalist.get(position);
         ApplicationInfo info = null;
+        Observable<ApplicationInfo> myObserve =Observable.create(new Observable.OnSubscribe<ApplicationInfo>(){
+
+            @Override
+            public void call(Subscriber<? super ApplicationInfo> subscriber) {
+
+            }
+        });
+
+        Subscriber<ApplicationInfo> mySub = new Subscriber<ApplicationInfo>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ApplicationInfo info) {
+
+            }
+        };
+        myObserve.subscribe(new Action1<ApplicationInfo>() {
+            @Override
+            public void call(ApplicationInfo applicationInfo) {
+
+            }
+        });
+
         if (((MainActivity)mContext).isIdle) {
             try {
                 info = mPakgageManger.getApplicationInfo(usageStats.getPackageName(), 0);
-                holder.mainIcon.setImageDrawable(info.loadIcon(mPakgageManger));
-                holder.mainAppName.setText(info.loadLabel(mPakgageManger));
-                Bitmap bm = DateUtils.convertDrawable2BitmapByCanvas(info.loadIcon(mPakgageManger));
-                Palette palette = Palette.generate(bm);
-                holder.mCardview.setCardBackgroundColor(palette.getMutedColor(R.color.primary));
+                Observable.just(info)
+
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .map(new Func1<ApplicationInfo, ApplicationInfo>() {
+                            @Override
+                            public ApplicationInfo call(ApplicationInfo info) {
+                                holder.mainIcon.setImageDrawable(info.loadIcon(mPakgageManger));
+                                holder.mainAppName.setText(info.loadLabel(mPakgageManger));
+                                return info;
+                            }
+                        })
+                        .map(new Func1<ApplicationInfo, Integer>() {
+                            @Override
+                            public Integer call(ApplicationInfo applicationInfo) {
+                                Bitmap bm = DateUtils.convertDrawable2BitmapByCanvas(applicationInfo.loadIcon(mPakgageManger));
+                                Palette palette = Palette.generate(bm);
+                                return palette.getMutedColor(R.color.primary);
+                            }
+                        })
+
+                        .subscribe(new Action1<Integer>() {
+                            @Override
+                            public void call(Integer i) {
+
+
+                                holder.mCardview.setCardBackgroundColor(i);
+                            }
+                        });
             } catch (PackageManager.NameNotFoundException e) {
                 holder.mainIcon.setImageResource(R.mipmap.ic_launcher);
                 holder.mainAppName.setText(usageStats.getPackageName() + "已卸载");
