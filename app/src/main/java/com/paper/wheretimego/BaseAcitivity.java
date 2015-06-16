@@ -1,6 +1,6 @@
 package com.paper.wheretimego;
 
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -18,7 +18,7 @@ import com.umeng.analytics.MobclickAgent;
  * <p/>
  * Created by Paper on 15-5-2 2015.
  */
-public class BaseAcitivity extends ActionBarActivity {
+public class BaseAcitivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
