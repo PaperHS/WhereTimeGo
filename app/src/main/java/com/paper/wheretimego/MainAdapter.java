@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -65,7 +66,15 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainAdapterVH>
     }
 
     @Override
+    public void onViewDetachedFromWindow(MainAdapterVH holder) {
+        super.onViewDetachedFromWindow(holder);
+//        holder.itemView.clearAnimation();
+    }
+
+    @Override
     public void onBindViewHolder(final MainAdapterVH holder, int position) {
+        holder.itemView.setX(-holder.itemView.getWidth());
+        ViewCompat.animate(holder.itemView).setDuration(1000).translationX(0).start();
         UsageStats usageStats = datalist.get(position);
         ApplicationInfo info = null;
         Observable<ApplicationInfo> myObserve =Observable.create(new Observable.OnSubscribe<ApplicationInfo>(){

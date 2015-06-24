@@ -33,5 +33,7 @@ public class App extends Application {
         componet = DaggerApplicationComponet.builder()
                 .rxBusModule(new RxBusModule())
                 .build();
+        componet.inject(this);
+
     }
 }
