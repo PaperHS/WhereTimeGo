@@ -5,6 +5,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -44,7 +45,7 @@ public class MainActivity extends BaseAcitivity {
         setSupportActionBar(toolbar);
         UmengUpdateAgent.update(this);
         init();
-
+        startActivity(new Intent(this, LoginActivity.class));
     }
 
     @Override
@@ -66,6 +67,7 @@ public class MainActivity extends BaseAcitivity {
         Collections.sort(queryUsageStats, new UseTimeCompare());
         mainRecycleview.setLayoutManager(new LinearLayoutManager(this));
 //        mainRecycleview.setItemAnimator(new DefaultItemAnimator());
+
         mainRecycleview.setItemAnimator(new RecyclerView.ItemAnimator() {
             List<RecyclerView.ViewHolder> mAnimationAddViewHolders = new ArrayList<RecyclerView.ViewHolder>();
             List<RecyclerView.ViewHolder> mAnimationRemoveViewHolders = new ArrayList<RecyclerView.ViewHolder>();

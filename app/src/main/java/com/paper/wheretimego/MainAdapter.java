@@ -2,6 +2,7 @@ package com.paper.wheretimego;
 
 import android.app.usage.UsageStats;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -68,8 +69,16 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainAdapterVH>
     @Override
     public void onViewDetachedFromWindow(MainAdapterVH holder) {
         super.onViewDetachedFromWindow(holder);
-//        holder.itemView.clearAnimation();
+        holder.itemView.clearAnimation();
     }
+
+    @Override
+    public void onViewRecycled(MainAdapterVH holder) {
+        super.onViewRecycled(holder);
+        holder.itemView.setX(-holder.itemView.getWidth());
+        ViewCompat.animate(holder.itemView).setDuration(1000).translationX(0).start();
+    }
+
 
     @Override
     public void onBindViewHolder(final MainAdapterVH holder, int position) {
@@ -77,6 +86,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainAdapterVH>
         ViewCompat.animate(holder.itemView).setDuration(1000).translationX(0).start();
         UsageStats usageStats = datalist.get(position);
         ApplicationInfo info = null;
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mContext.startActivity(new Intent(mContext, LoginActivity.class));
+            }
+        });
+
         Observable<ApplicationInfo> myObserve =Observable.create(new Observable.OnSubscribe<ApplicationInfo>(){
 
             @Override

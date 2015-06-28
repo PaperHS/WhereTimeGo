@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="paper_item_height">50dp</dimen>
+    <dimen name="paper_common_padding">16dp</dimen>
+</resources>
